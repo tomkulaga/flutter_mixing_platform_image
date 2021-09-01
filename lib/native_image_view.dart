@@ -19,6 +19,36 @@ class _NativeImageViewState extends State<NativeImageView> {
     // Pass parameters to the platform side.
     final Map<String, dynamic> creationParams = <String, dynamic>{};
 
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return buildAndroid(context);
+      case TargetPlatform.iOS:
+        return buildiOS(context);
+      default:
+        throw UnsupportedError("Unsupported platform view");
+    }
+  }
+
+  Widget buildiOS(BuildContext context) {
+    // This is used in the platform side to register the view.
+    final String viewType = '<platform-view-type>';
+    // Pass parameters to the platform side.
+    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
+    return UiKitView(
+      viewType: viewType,
+      layoutDirection: TextDirection.ltr,
+      creationParams: creationParams,
+      creationParamsCodec: const StandardMessageCodec(),
+    );
+  }
+
+  Widget buildAndroid(BuildContext context) {
+    // This is used in the platform side to register the view.
+    final String viewType = '<platform-view-type>';
+    // Pass parameters to the platform side.
+    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
     return PlatformViewLink(
       viewType: viewType,
       surfaceFactory: (BuildContext context, PlatformViewController controller) {
